@@ -22,6 +22,26 @@ export default class Referee {
         }
     }
 
+    isEnPassantMove(px, py, x, y, type, team, boardState){
+        const pawnDirection = (team === TeamType.OUR) ? 1 : -1;
+        
+
+        if(type === PieceType.PAWN){
+            if ((x - px === -1 || x - px === 1) && y - py === pawnDirection) {
+                const piece = boardState.find(
+                    p => p.x === x && p.y === y - pawnDirection && p.enPassant
+                );
+                console.log("Pawns with enPassant true:", boardState.filter(p => p.type === PieceType.PAWN && p.enPassant));
+                if(piece){
+                    return true;
+                }
+            } 
+        }
+
+        return false;
+    }
+
+
     isValidMove(px, py, x, y, type, team, boardState) {
         // console.log("Referee checking moves");
         // console.log(`Previous Location: (${px},${py})`);
