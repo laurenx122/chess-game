@@ -122,19 +122,69 @@ const Chessboard = () => {
             if (currentPiece) {
                 const validMove = referee.isValidMove(gridX, gridY, x, y, currentPiece?.type, currentPiece?.team, pieces);
 
+                const isEnPassantMove = referee.isEnPassantMove(gridX, gridY, x, y, currentPiece.type, currentPiece.team, pieces)
+                const pawnDirection = (currentPiece.team === TeamType.OUR) ? 1 : -1;
 
-                //reduce function
-                //results => array of results
-                //piece => a current piece we are handling
-                //updates the chess pieces
-                if (validMove) {
+                if (isEnPassantMove) {
+                    const updatedPieces = pieces.reduce((results, piece) => {
+                        if (piece.x === gridX && piece.y === gridY) {
+                            piece.enPassant = false;
+                            piece.x = x;
+                            piece.y = y;
+                            results.push(piece);
+                        } else if (!(piece.x === x && piece.y === y - pawnDirection)) {
+                            if (piece.type === PieceType.PAWN) {
+                                piece.enPassant = false;
+                            }
+                            results.push(piece);
+                        }
+
+                        return results;
+                    }, []);
+
+                    setPieces(updatedPieces);
+                }
+                else if (validMove) {
+                    const updatedPieces = pieces.reduce((results, piece) => {
+                        if (piece.x === gridX && piece.y === gridY) {
+                            if (Math.abs(gridY - y) === 2 && piece.type === PieceType.PAWN) {
+                                // SPECIAL MOVE
+                                console.log("En passant true");
+                                piece.enPassant = true;
+                            } else {
+                                piece.enPassant = false;
+                            }
+                            piece.x = x;
+                            piece.y = y;
+                            results.push(piece);
+                        } else if (!(piece.x === x && piece.y === y)) {
+                            if (piece.type === PieceType.PAWN) {
+                                piece.enPassant = false;
+                            }
+                            results.push(piece);
+                        }
+                        // Pieces at the destination are implicitly removed (captured)
+                        return results;
+                    }, []);
+
+                    setPieces(updatedPieces);
+                    /*
                     setPieces((value) => {
                         const pieces = value.reduce((results, piece) => {
-                            if (piece.x === currentPiece.x && piece.y === currentPiece.y) {
-                                // update the moved piece
+                            if (piece.x === gridX && piece.y === gridY) {
+                                if (Math.abs(gridX - y) === 2 && piece.type === PieceType.PAWN) {
+                                    //special move
+                                    console.log("En passant true");
+                                    piece.enPassant = true;
+                                } else {
+                                    piece.enPassant = true;
+                                }
                                 results.push({ ...piece, x: x, y: y });
                             } else if (!(piece.x === x && piece.y === y)) {
                                 // keep pieces that are not at the destination
+                                if (piece.type === PieceType.PAWN) {
+                                    piece.enPassant = false;
+                                }
                                 results.push(piece);
                             }
                             // pieces at the destination are implicitly removed (captured)
@@ -142,7 +192,7 @@ const Chessboard = () => {
                         }, []);
 
                         return pieces;
-                    })
+                    })*/
                 } else {
                     //resets the piece position
                     // removes the piece being attacked

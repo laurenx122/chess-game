@@ -18,5 +18,6 @@ export const Piece = {
     x: 0,
     y: 0,
     type: null,
-    team: null
+    team: null,
+    enPassant: false
 };
