@@ -1,5 +1,11 @@
-export const horizontalAxis = ["a", "b", "c", "d", "e", "f", "g", "h"]
-export const verticalAxis = ["1", "2", "3", "4", "5", "6", "7", "8"]
+export const HORIZONTAL_AXIS = ["a", "b", "c", "d", "e", "f", "g", "h"]
+export const VERTICAL_AXIS = ["1", "2", "3", "4", "5", "6", "7", "8"]
+
+export const GRID_SIZE = 100;
+
+export function samePosition(p1, p2){
+    return p1.x === p2.x && p1.y === p2.y;
+}
 
 export const Position = {
     x: 0,

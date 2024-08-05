@@ -13,7 +13,7 @@ export default class Referee {
         }
     }
 
-    TileIsOccupiedByOpponent(x, y, boardState, team) {
+    tileIsOccupiedByOpponent(x, y, boardState, team) {
         const piece = boardState.find(p => p.position.x === x && p.position.y === y && p.team !== team);
         if (piece) {
             return true;
@@ -22,27 +22,30 @@ export default class Referee {
         }
     }
 
-    isEnPassantMove(px, py, x, y, type, team, boardState){
+    isEnPassantMove(initialPosition, desiredPosition, type, team, boardState) {
         const pawnDirection = (team === TeamType.OUR) ? 1 : -1;
-        
 
-        if(type === PieceType.PAWN){
-            if ((x - px === -1 || x - px === 1) && y - py === pawnDirection) {
+
+        if (type === PieceType.PAWN) {
+            if ((desiredPosition.x - initialPosition.x === -1 || desiredPosition.x - initialPosition.x === 1) && desiredPosition.y - initialPosition.y === pawnDirection) {
                 const piece = boardState.find(
-                    p => p.position.x === x && p.position.y === y - pawnDirection && p.enPassant
+                    p =>
+                        p.position.x === desiredPosition.x &&
+                        p.position.y === desiredPosition.y - pawnDirection && 
+                        p.enPassant
                 );
                 console.log("Pawns with enPassant true:", boardState.filter(p => p.type === PieceType.PAWN && p.enPassant));
-                if(piece){
+                if (piece) {
                     return true;
                 }
-            } 
+            }
         }
 
         return false;
     }
 
 
-    isValidMove(px, py, x, y, type, team, boardState) {
+    isValidMove(initialPosition, desiredPosition, type, team, boardState) {
         // console.log("Referee checking moves");
         // console.log(`Previous Location: (${px},${py})`);
         // console.log(`Current Location: (${x},${y})`);
@@ -54,30 +57,30 @@ export default class Referee {
             const pawnDirection = (team === TeamType.OUR) ? 1 : -1;
 
             // movement logic
-            if (px === x && py == specialRow && y - py === 2 * pawnDirection) {
-                if (!this.tileIsOccupied(x, y, boardState) && !this.tileIsOccupied(x, y - pawnDirection, boardState)) {
+            if (initialPosition.x === desiredPosition.x && initialPosition.y == specialRow && desiredPosition.y - initialPosition.y === 2 * pawnDirection) {
+                if (!this.tileIsOccupied(desiredPosition.x, desiredPosition.y, boardState) && !this.tileIsOccupied(desiredPosition.x, desiredPosition.y - pawnDirection, boardState)) {
                     console.log("valid move");
                     return true;
                 }
-            } else if (px === x && y - py === pawnDirection) {
-                if (!this.tileIsOccupied(x, y, boardState)) {
+            } else if (initialPosition.x === desiredPosition.x && desiredPosition.y - initialPosition.y === pawnDirection) {
+                if (!this.tileIsOccupied(desiredPosition.x, desiredPosition.y, boardState)) {
                     console.log("valid move");
                     return true;
                 }
             }
 
             // attack logic
-            else if (x - px === -1 && y - py === pawnDirection) {
+            else if (desiredPosition.x - initialPosition.x === -1 && desiredPosition.y - initialPosition.y === pawnDirection) {
                 // attack in upper or bottom left corner
                 console.log("upper/bottom left attack");
-                if (this.TileIsOccupiedByOpponent(x, y, boardState, team)) {
+                if (this.tileIsOccupiedByOpponent(desiredPosition.x, desiredPosition.y, boardState, team)) {
                     console.log("we can strike the enemy");
                     return true;
                 }
-            } else if (x - px === 1 && y - py === pawnDirection) {
+            } else if (desiredPosition.x -initialPosition.x === 1 && desiredPosition.y - initialPosition.y === pawnDirection) {
                 // attack in upper or bottom right corner
                 console.log("upper/bottom right attack");
-                if (this.TileIsOccupiedByOpponent(x, y, boardState, team)) {
+                if (this.tileIsOccupiedByOpponent(desiredPosition.x, desiredPosition.y, boardState, team)) {
                     console.log("we can strike the enemy");
                     return true;
 
