@@ -1,10 +1,10 @@
-import { PieceType, TeamType, Piece } from "./PieceType.jsx";
+import { PieceType, TeamType } from "../Constants.jsx";
 
 export default class Referee {
     tileIsOccupied(x, y, boardState) {
         console.log("Checking if occupied");
 
-        const piece = boardState.find(p => p.x === x && p.y === y);
+        const piece = boardState.find(p => p.position.x === x && p.position.y === y);
 
         if (piece) {
             return true;
@@ -14,7 +14,7 @@ export default class Referee {
     }
 
     TileIsOccupiedByOpponent(x, y, boardState, team) {
-        const piece = boardState.find(p => p.x === x && p.y === y && p.team !== team);
+        const piece = boardState.find(p => p.position.x === x && p.position.y === y && p.team !== team);
         if (piece) {
             return true;
         } else {
@@ -29,7 +29,7 @@ export default class Referee {
         if(type === PieceType.PAWN){
             if ((x - px === -1 || x - px === 1) && y - py === pawnDirection) {
                 const piece = boardState.find(
-                    p => p.x === x && p.y === y - pawnDirection && p.enPassant
+                    p => p.position.x === x && p.position.y === y - pawnDirection && p.enPassant
                 );
                 console.log("Pawns with enPassant true:", boardState.filter(p => p.type === PieceType.PAWN && p.enPassant));
                 if(piece){
