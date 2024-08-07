@@ -52,7 +52,7 @@ for (let p = 0; p < 2; p++) {
     initialBoardState.push({
         image: `chess-pieces/knight_${type}.png`,
         position: {
-            x: 1, y,
+            x: 1, y
         },
         type: PieceType.KNIGHT,
         team: TeamType
