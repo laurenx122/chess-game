@@ -2,11 +2,12 @@ import { PieceType, samePosition, TeamType } from "../Constants.jsx";
 
 export default class Referee {
     tileIsEmptyOrOccupiedByOpponent(position, boardState, team) {
-        //return (!this.tileIsOccupied(position, boardState) || this.tileIsOccupiedByOpponent(position, boardState, team));
-        if (!this.tileIsOccupied(position, boardState)) {
-            return true;
-        }
-        return this.tileIsOccupiedByOpponent(position, boardState, team);
+
+        return (!this.tileIsOccupied(position, boardState) || this.tileIsOccupiedByOpponent(position, boardState, team));
+        // if (!this.tileIsOccupied(position, boardState)) {
+        //     return true;
+        // }
+        // return this.tileIsOccupiedByOpponent(position, boardState, team);
     }
 
     tileIsOccupied(position, boardState) {
@@ -63,10 +64,12 @@ export default class Referee {
         // console.log(`Team: ${team}`);
 
         if (type === PieceType.PAWN) {
+
             const specialRow = (team === TeamType.OUR) ? 1 : 6;
             const pawnDirection = (team === TeamType.OUR) ? 1 : -1;
 
             // movement logic
+
             if (
                 initialPosition.x === desiredPosition.x &&
                 initialPosition.y == specialRow &&
@@ -91,6 +94,7 @@ export default class Referee {
             }
 
             // attack logic
+
             else if (
                 desiredPosition.x - initialPosition.x === -1 &&
                 desiredPosition.y - initialPosition.y === pawnDirection
@@ -118,9 +122,11 @@ export default class Referee {
                 }
             }
         } else if (type === PieceType.KNIGHT) {
+
             // movement logic
             for (let i = -1; i < 2; i += 2) {
                 for (let j = -1; j < 2; j += 2) {
+
                     // top/bottom movement
                     if (desiredPosition.y - initialPosition.y === 2 * i) {
                         if (desiredPosition.x - initialPosition.x === j) {
@@ -144,6 +150,7 @@ export default class Referee {
 
 
         } else if (type === PieceType.BISHOP) {
+
             //movement and attack logic
 
             for (let i = 1; i < 8; i++) {
@@ -229,6 +236,8 @@ export default class Referee {
                 }
             }
         }
+
         return false;
+        
     }
 }
