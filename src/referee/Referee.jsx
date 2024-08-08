@@ -11,12 +11,12 @@ export default class Referee {
 
     tileIsOccupied(position, boardState) {
         const piece = boardState.find(p => samePosition(p.position, position));
-        return !!piece;
-        // if (piece) {
-        //     return true;
-        // } else {
-        //     return false;
-        // }
+        // return !!piece;
+        if (piece) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     tileIsOccupiedByOpponent(position, boardState, team) {
@@ -24,12 +24,12 @@ export default class Referee {
             p => samePosition(p.position, position) &&
                 p.team !== team
         );
-        return !!piece;
-        // if (piece) {
-        //     return true;
-        // } else {
-        //     return false;
-        // }
+        // return !!piece;
+        if (piece) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     isEnPassantMove(initialPosition, desiredPosition, type, team, boardState) {
